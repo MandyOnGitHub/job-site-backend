@@ -1,0 +1,17 @@
+{
+    "angular": {
+        "name": "Angular",
+        "url": "https://onespace.pages.dev/techItems?id=36",
+        "description": "together with React and Vue.js one of the three most popular JavaScript frameworks"
+    },
+    "cicd": {
+        "name": "CI/CD",
+        "url": "https://about.gitlab.com/topics/ci-cd",
+        "description": "the combined practices of continuous integration (CI) and continuous deployment (CD)"
+    },
+    "react": {
+        "name": "React",
+        "url": "https://onespace.pages.dev/techItems?id=2",
+        "description": "currently the most popular front-end JavaScript framework along with Vue and Angular"
+    }
+}

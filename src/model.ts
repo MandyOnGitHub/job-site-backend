@@ -1,22 +1,17 @@
+
 // models
-import fs from 'fs'
+import fs from 'fs';
+import * as model from './model.js';
+import { RawJob, Job, Skill, nullObjectSkill } from './types.js';
 
 // without JSON.parse buffer will be read
-const jobs = (JSON.parse(fs.readFileSync('./src/data/jobs.json', 'utf-8')) as Job[])
-type Job = {
-    id: number,
-    title: string,
-    company: string,
-    url: string,
-    description: string,
-    skilllist: string,
-    todo: string,
-}
+const rawJobs: RawJob[] = JSON.parse(fs.readFileSync('./src/data/jobs.json', 'utf-8'))
+const skillInfos: any = JSON.parse(fs.readFileSync('./src/data/skillInfos.json', 'utf-8'))
 
 
 
 export const getApiInstructionsHtml = () => {
-	return `
+    return `
 <style>
 a, h1 {
 	background-color: #ddd;
@@ -32,12 +27,47 @@ a, h1 {
 	`;
 }
 
-export const getJobs = () =>{
+export const getJobs = () => {
+    const jobs: Job[] = [];
+    rawJobs.forEach((rawJob: RawJob) => {
+        const job: Job = {
+            ...rawJob,
+            skills: model.buildSkills(rawJob.skilllist)
+        }
+        jobs.push(job);
+    })
+
     return jobs
 }
 
-export const getTodos = ()=> {
-    const todos = jobs.map((job: Job) => {
+export const buildSkills = (skilllist: string) => {
+    const skills: Skill[] = [];
+    const skillIdCodes = skilllist.split(',').map(skill => skill.trim());
+    skillIdCodes.forEach(skillIdCode => {
+        const _skill = skillInfos[skillIdCode]
+        if (_skill === undefined) {
+            const skill: Skill = {
+                ...nullObjectSkill,
+                idCode: skillIdCode,
+            };
+            skills.push(skill);
+        } else {
+            const skill: Skill = {
+                idCode: skillIdCode,
+                name: _skill.name,
+                url: _skill.url,
+                description: _skill.description,
+            }
+            skills.push(skill);
+        }
+
+    })
+
+    return skills
+}
+
+export const getTodos = () => {
+    const todos = rawJobs.map((job: RawJob) => {
         return {
             todo: job.todo,
             company: job.company,
