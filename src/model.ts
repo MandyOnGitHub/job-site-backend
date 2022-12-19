@@ -2,7 +2,7 @@
 // models
 import fs from 'fs';
 import * as model from './model.js';
-import { RawJob, Job, Skill, nullObjectSkill } from './types.js';
+import { RawJob, Job, Skill, nullObjectSkill, SkillTotal } from './types.js';
 
 // without JSON.parse buffer will be read
 const rawJobs: RawJob[] = JSON.parse(fs.readFileSync('./src/data/jobs.json', 'utf-8'))
@@ -64,6 +64,23 @@ export const buildSkills = (skilllist: string) => {
     })
 
     return skills
+}
+export const getSkillTotals = () => {
+	const skillTotals: SkillTotal[] = [];
+	model.getJobs().forEach(job => {
+		job.skills.forEach(skill => {
+			const existingSkillTotal = skillTotals.find(skillTotal => skillTotal.skill.idCode === skill.idCode);
+			if (!existingSkillTotal) {
+				skillTotals.push({
+					skill,
+					total: 1
+				});
+			} else {
+				existingSkillTotal.total++;
+			}
+		});
+	})
+	return skillTotals;
 }
 
 export const getTodos = () => {
