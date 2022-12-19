@@ -38,6 +38,7 @@ app.get('/todos', (req: express.Request, res: express.Response) => {
     res.json(todos)
 })
 
+
 app.listen(port, () => {
     console.log(`listening on http://localhost:${port}`);
 })
