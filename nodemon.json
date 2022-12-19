@@ -1,5 +1,5 @@
 {
     "watch": [""],
-    "ext": "ts",
+    "ext": "ts, json",
     "exec": "npm run build && node dist/server.js"
 }
