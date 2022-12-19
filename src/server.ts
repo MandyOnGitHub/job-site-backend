@@ -1,41 +1,24 @@
 import express from 'express'
-import fs from 'fs'
 import cors from 'cors';
+import * as model from './model.js'
 
 const app = express();
 app.use(cors());
-
-// without JSON.parse buffer will be read
-const jobs = (JSON.parse(fs.readFileSync('./src/data/jobs.json', 'utf-8')) as Job[])
 const port = 5000;
 
-type Job = {
-    id: number,
-    title: string,
-    company: string,
-    url: string,
-    description: string,
-    skilllist: string,
-    todo: string,
-}
+
+// controller
 
 app.get('/', (req: express.Request, res: express.Response) => {
-    res.send('job site api');
+    res.send(model.getApiInstructionsHtml());
 })
 
 app.get('/jobs', (req: express.Request, res: express.Response) => {
-    res.json(jobs)
+    res.json(model.getJobs())
 })
 
 app.get('/todos', (req: express.Request, res: express.Response) => {
-    const todos = jobs.map((job: Job) => {
-        return {
-            todo: job.todo,
-            company: job.company,
-            title: job.title,
-        }
-    })
-    res.json(todos)
+    res.json(model.getTodos())
 })
 
 
