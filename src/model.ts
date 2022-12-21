@@ -4,7 +4,7 @@ import fs from 'fs';
 import * as model from './model.js';
 import { RawJob, Job, Skill, nullObjectSkill, SkillTotal } from './types.js';
 
-// set up low db
+// set up low db boilerplate only path to db.json needs to be updated
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url'
 import { Low } from 'lowdb';
@@ -17,10 +17,13 @@ const db:any = new Low(adapter);
 await db.read();
 // 
 
+// removed local files and change to lowdb *****************************************************
+
 // without JSON.parse buffer will be read
 // const rawJobs: RawJob[] = JSON.parse(fs.readFileSync('./src/data/jobs.json', 'utf-8'))
 // const skillInfos: any = JSON.parse(fs.readFileSync('./src/data/skillInfos.json', 'utf-8'))
 
+// *********************************************************************************************
 
 
 export const getApiInstructionsHtml = () => {
@@ -46,7 +49,7 @@ export const getJobs = () => {
     rawJobs.forEach((rawJob: RawJob) => {
         const job: Job = {
             ...rawJob,
-            skills: model.buildSkills(rawJob.skilllist)
+            skills: model.buildSkills(rawJob.skillList)
         }
         jobs.push(job);
     })
@@ -55,13 +58,13 @@ export const getJobs = () => {
 }
 
 export const buildSkills = (skilllist: string) => {
-    const skillInfos = db.data.skillsInfo
-    console.log("skillInfos", skillInfos);
-    
+    const skillInfos = db.data.skills
     const skills: Skill[] = [];
     const skillIdCodes = skilllist.split(',').map(skill => skill.trim());
+
+    
     skillIdCodes.forEach(skillIdCode => {
-        const _skill = skillInfos[skillIdCode]
+        const _skill = skillInfos.find((skill)=> skill.idCode === skillIdCode)        
         if (_skill === undefined) {
             const skill: Skill = {
                 ...nullObjectSkill,
@@ -112,4 +115,11 @@ export const getTodos = () => {
         }
     })
     return todos
+}
+
+export const deleteJob = async (id: number )=> {
+    const deletedObject = db.data.jobs.find((job: Job)=> job.id === id)
+    db.data.jobs = db.data.jobs.filter((job:Job )=> job.id !== id)
+    await db.write()
+    return deletedObject
 }

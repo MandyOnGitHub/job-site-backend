@@ -25,6 +25,21 @@ app.get('/totaledSkills', (req: express.Request, res: express.Response) => {
     res.json(model.getSkillTotals())
 })
 
+app.delete('/jobs/:id', async (req: express.Request, res: express.Response) => {
+    const id = Number(req.params.id)
+    const deletedObject = await model.deleteJob(id)
+    console.log(deletedObject, 'deletedObject');
+    
+    if(deletedObject === undefined){
+        res.status(409).send({
+            error:true,
+            message: `job with ${id} does not exist, deletion failed.`
+        })
+    }else{
+        res.status(200).json(deletedObject)
+    }
+    
+})
 
 
 

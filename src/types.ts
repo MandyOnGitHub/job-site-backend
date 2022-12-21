@@ -4,7 +4,7 @@ export type RawJob = {
     company: string,
     url: string,
     description: string,
-    skilllist: string,
+    skillList: string,
     todo: string,
 }
 
@@ -14,7 +14,7 @@ export type Job = {
     company: string,
     url: string,
     description: string,
-    skilllist: string,
+    skillList: string,
     skills: Skill[],
     todo: string,
 }
