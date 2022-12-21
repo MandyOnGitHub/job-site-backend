@@ -86,9 +86,10 @@ export const getSkillTotals = () => {
 export const getTodos = () => {
     const todos = rawJobs.map((job: RawJob) => {
         return {
-            todo: job.todo,
+            todoText: job.todo,
             company: job.company,
             title: job.title,
+            url: job.url
         }
     })
     return todos

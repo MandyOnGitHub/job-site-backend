@@ -21,7 +21,7 @@ app.get('/todos', (req: express.Request, res: express.Response) => {
     res.json(model.getTodos())
 })
 
-app.get('/skillTotals', (req: express.Request, res: express.Response) => {
+app.get('/totaledSkills', (req: express.Request, res: express.Response) => {
     res.json(model.getSkillTotals())
 })
 
